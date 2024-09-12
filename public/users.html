@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Online</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .user-list {
+      margin: 20px;
+    }
+    .user-item {
+      background-color: #f8f9fa;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="my-4">Users Online</h1>
+    <div class="user-list" id="user-list"></div>
+  </div>
+
+  <script>
+    // Fetch the list of online users from the server
+    fetch('/users-online')
+      .then(response => response.json())
+      .then(users => {
+        const userList = document.getElementById('user-list');
+
+        // If there are no users online
+        if (users.length === 0) {
+          userList.innerHTML = '<p>No users are online at the moment.</p>';
+          return;
+        }
+
+        // Display each user's name and IP
+        users.forEach(user => {
+          const userItem = document.createElement('div');
+          userItem.classList.add('user-item');
+          userItem.innerHTML = `<strong>Name:</strong> ${user.nickname} <br> <strong>IP:</strong> ${user.ip}`;
+          userList.appendChild(userItem);
+        });
+      })
+      .catch(error => console.error('Error fetching users:', error));
+      //setTimeout(location.reload(), 2000)
+      
+  </script>
+</body>
+</html>

@@ -13,36 +13,45 @@ app.use(express.static('public'));
 // In-memory store for messages and users
 let users = {};
 let messages = [];
-
+// Function to sanitize inputs by encoding HTML special characters
+function sanitizeInput(input) {
+    return input.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+  }
 // When a client connects
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
+  const userIp = socket.handshake.address;
+  console.log(`User connected from IP: ${userIp}, Id:${socket.id}`);
 
   // Send chat history to the new client
   socket.emit('load history', messages);
 
-  // Listen for nickname submission
+  // When a client sets their nickname
   socket.on('set nickname', (nickname) => {
-    console.log('Nickname received:', nickname);  // Debugging log
-    users[socket.id] = nickname; // Store the user's nickname
-    io.emit('user connected', nickname); // Notify others
+    nickname = sanitizeInput(nickname);  // Sanitize the nickname
+    users[socket.id] = nickname;
+    console.log(`User with IP ${socket.handshake.address} set nickname: ${nickname}`);
+    io.emit('user connected', nickname);
   });
-
-  // Listen for chat messages from this client
+  
+  // When a client sends a message
   socket.on('chat message', (msg) => {
-    const nickname = users[socket.id] || 'Anonymous'; // Default to 'Anonymous'
-    console.log('Message received from', nickname, ':', msg);  // Debugging log
-
+    const nickname = users[socket.id] || 'Anonymous';
+    msg = sanitizeInput(msg);  // Sanitize the message
     const messageData = { nickname, msg, time: new Date() };
-    messages.push(messageData); // Store message in history
-    io.emit('chat message', messageData); // Broadcast the message to all clients
+    messages.push(messageData);  // Store message
+    io.emit('chat message', messageData);
+    console.log(`Message from IP ${userIp}: ${msg}`);
   });
 
   // Handle client disconnect
   socket.on('disconnect', () => {
     const nickname = users[socket.id];
     delete users[socket.id]; // Remove the user from the list
-    console.log(`${nickname || 'A user'} disconnected`);
+    console.log(`${nickname || 'A user'} disconnected with IP:${userIp}`);
   });
 
   // Handle typing indicator
@@ -55,6 +64,11 @@ io.on('connection', (socket) => {
     const nickname = users[socket.id];
     socket.broadcast.emit('stop typing', nickname);
   });
+});
+// Route to serve the online user list as JSON
+app.get('/users-online', (req, res) => {
+  const onlineUsers = Object.values(users);
+  res.json(onlineUsers);
 });
 
 // Start the server
