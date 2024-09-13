@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
     const nickname = users[socket.id];
     delete users[socket.id]; // Remove the user from the list
     console.log(`${nickname || 'A user'} disconnected with IP:${userIp}`);
+    io.emit('user disconnected', nickname);
   });
 
   // Handle typing indicator

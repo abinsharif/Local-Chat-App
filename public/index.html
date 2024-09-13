@@ -13,7 +13,6 @@
 <body>
   <div id="chat-container">
     <h1 class="text-center">Local Chat App</h1>
-
     <!-- Nickname Section -->
     <div id="nickname-section">
       <form id="nickname-form">
@@ -21,10 +20,10 @@
           <input
             id="nickname-input"
             class="form-control"
-            placeholder="Enter your nickname"
+            placeholder="Enter your Name"
             required
           />
-          <button class="btn btn-primary" type="submit">Set Nickname</button>
+          <button class="btn btn-primary" type="submit">Set Name</button>
         </div>
       </form>
     </div>
@@ -45,15 +44,9 @@
     </form>
   </div>
 
-  <!-- Sound Notification -->
-  <audio id="message-sound" src="/notification.mp3" preload="auto"></audio>
-  <!-- Socket.IO -->
-  <script src="/socket.io/socket.io.js"></script>
-  <!-- Bootstrap JS Bundle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
-  <!-- Client-side JavaScript -->
-  <script src="script.js"></script>
+  <!-- Sound Notification --><audio id="message-sound" src="/notification.mp3" preload="auto"></audio>
+  <!-- Socket.IO --><script src="/socket.io/socket.io.js"></script>
+  <!-- Bootstrap JS Bundle --><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Client-side JavaScript --><script src="script.js"></script>
 </body>
 </html>

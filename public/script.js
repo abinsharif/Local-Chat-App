@@ -63,12 +63,16 @@ document.getElementById('nickname-form').addEventListener('submit', (e) => {
     });
     // Show a notification when a user joins the chat
 socket.on('user connected', (nickname) => {
-    showNotification(`${nickname} joined the chat`);
+    showNotification(`${nickname} joined the chat`,"con");
   });
+socket.on('user disconnected', (nickname) => {
+  showNotification(`${nickname} disconnected from the chat`,"dis");
+});
   
-  function showNotification(message) {
+  function showNotification(message,type) {
     const notification = document.createElement('div');
     notification.classList.add('notification');
+    notification.classList.add(type);
     notification.textContent = message;
     document.body.appendChild(notification);
     

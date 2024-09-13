@@ -2,7 +2,7 @@
 #messages {
     list-style-type: none;
     padding: 0;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
   }
 
@@ -45,22 +45,22 @@
   }
 
   /* Add color classes */
-  .color-1 { color: blue; }
+  .color-1 { color: lime; }
   .color-2 { color: orange; }
-  .color-3 { color: darkolivegreen; }
+  .color-3 { color: blue; }
   .color-4 { color: red; }
   .color-5 { color: purple; }
   .color-6 { color: brown; }
-  .color-7 { color: peru; }
-  .color-8 { color: gray; }
-  .color-9 { color: lime; }
-  .color-10 { color: violet; }
-  .color-11 { color: green; }
+  .color-7 { color: yellowgreen; }
+  .color-8 { color: green; }
+  .color-9 { color: deeppink; }
+  .color-10 { color: black; }
+  .color-11 { color: gray; }
   .color-12 { color: deepskyblue; }
-  .color-13 { color: yellow; }
-  .color-14 { color: black; }
+  .color-13 { color: peru; }
+  .color-14 { color: violet; }
   .color-15 { color: crimson; }
-  .color-16 { color: deeppink; }
+  .color-16 { color: darkolivegreen; }
   .color-17 { color: blueviolet; }
   .color-18 { color: tomato; }
   .color-19 { color: darkblue; }
@@ -69,7 +69,6 @@
       position: fixed;
       top: 10px;
       left: 10px;
-      background-color: #28a745;
       color: white;
       padding: 10px;
       border-radius: 5px;
@@ -77,3 +76,5 @@
       font-size: 14px;
       opacity: 0.9;
     }
+  .con { background-color: lime; }
+  .dis { background-color: red; }
