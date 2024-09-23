@@ -51,10 +51,10 @@
   .color-4 { color: red; }
   .color-5 { color: purple; }
   .color-6 { color: brown; }
-  .color-7 { color: yellowgreen; }
+  .color-7 { color:  black; }
   .color-8 { color: green; }
   .color-9 { color: deeppink; }
-  .color-10 { color: black; }
+  .color-10 { color:yellowgreen; }
   .color-11 { color: gray; }
   .color-12 { color: deepskyblue; }
   .color-13 { color: peru; }
@@ -78,3 +78,8 @@
     }
   .con { background-color: lime; }
   .dis { background-color: red; }
+  .message-time {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-left: 10px;
+  }

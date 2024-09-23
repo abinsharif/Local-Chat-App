@@ -24,7 +24,7 @@ function sanitizeInput(input) {
 // When a client connects
 io.on('connection', (socket) => {
   const userIp = socket.handshake.address;
-  console.log(`User connected from IP: ${userIp}, Id:${socket.id}`);
+  console.log(`[${new Date().toLocaleTimeString()}] User connected from IP: ${userIp}, Id: ${socket.id}`);
 
   // Send chat history to the new client
   socket.emit('load history', messages);
@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
   socket.on('set nickname', (nickname) => {
     nickname = sanitizeInput(nickname);  // Sanitize the nickname
     users[socket.id] = nickname;
-    console.log(`User with IP ${socket.handshake.address} set nickname: ${nickname}`);
+    console.log(`ID:${socket.id} IP ${socket.handshake.address} set nickname: ${nickname}`);
     io.emit('user connected', nickname);
   });
   
@@ -41,17 +41,17 @@ io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     const nickname = users[socket.id] || 'Anonymous';
     msg = sanitizeInput(msg);  // Sanitize the message
-    const messageData = { nickname, msg, time: new Date() };
+    const messageData = { nickname, msg, time: new Date().toLocaleTimeString() };
     messages.push(messageData);  // Store message
     io.emit('chat message', messageData);
-    console.log(`Message from IP ${userIp}: ${msg}`);
+    console.log(`[${new Date().toLocaleTimeString()}] ID: ${socket.id} ${nickname}: ${msg} (${userIp})`);
   });
 
   // Handle client disconnect
   socket.on('disconnect', () => {
     const nickname = users[socket.id];
     delete users[socket.id]; // Remove the user from the list
-    console.log(`${nickname || 'A user'} disconnected with IP:${userIp}`);
+    console.log(`[${new Date().toLocaleTimeString()}] ID: ${socket.id}; ${nickname || 'A user'} disconnected with IP: ${userIp}`);
     io.emit('user disconnected', nickname);
   });
 
@@ -73,7 +73,7 @@ app.get('/users-online', (req, res) => {
 });
 
 // Start the server
-const PORT = 3000;
+const PORT = 1234;
 server.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });

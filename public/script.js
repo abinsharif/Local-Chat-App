@@ -46,9 +46,9 @@ document.getElementById('nickname-form').addEventListener('submit', (e) => {
     });
 
     // When a message is received
-    socket.on('chat message', ({ nickname: sender, msg }) => {
-      appendMessage(sender, msg);
-      if (sender !== nickname) {
+    socket.on('chat message', ({ nickname, msg, time }) => {
+      appendMessage(nickname, msg, time);
+      if (nickname !== nickname) {
         playSound();
       }
     });
@@ -66,7 +66,7 @@ socket.on('user connected', (nickname) => {
     showNotification(`${nickname} joined the chat`,"con");
   });
 socket.on('user disconnected', (nickname) => {
-  showNotification(`${nickname} disconnected from the chat`,"dis");
+  showNotification(`${nickname} left the chat`,"dis");
 });
   
   function showNotification(message,type) {
@@ -81,21 +81,25 @@ socket.on('user disconnected', (nickname) => {
       notification.remove();
     }, 5000);
   }
-    // Append messages to the list with colors and formatting
-    function appendMessage(sender, message) {
-      const messages = document.getElementById('messages');
-      const item = document.createElement('li');
+// Append messages to the list with colors and formatting
+function appendMessage(sender, message, time) {
+  const messages = document.getElementById('messages');
+  const item = document.createElement('li');
 
-      // Assign or use existing color for the sender
-      if (!userColors[sender]) {
-        const colorIndex = Object.keys(userColors).length % 20 + 1;
-        userColors[sender] = `color-${colorIndex}`;
-      }
+  // Assign or use existing color for the sender
+  if (!userColors[sender]) {
+    const colorIndex = Object.keys(userColors).length % 20 + 1;
+    userColors[sender] = `color-${colorIndex}`;
+  }
 
-      item.innerHTML = `<span class="nickname ${userColors[sender]}">${sender}</span><span class="message-text">${message}</span>`;
-      messages.appendChild(item);
-      messages.scrollTop = messages.scrollHeight;
-    }
+  item.innerHTML = `
+    <span class="nickname ${userColors[sender]}">${sender}</span>
+    <span class="message-text">${message}</span>
+    <span class="message-time" style="color: #aaa; font-size: 0.8em;">${time}</span>
+  `;
+  messages.appendChild(item);
+  messages.scrollTop = messages.scrollHeight;
+}
 
     // Play sound when new message is received
     function playSound() {
