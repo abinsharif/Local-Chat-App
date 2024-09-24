@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -15,11 +13,7 @@ let users = {};
 let messages = [];
 // Function to sanitize inputs by encoding HTML special characters
 function sanitizeInput(input) {
-    return input.replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+return input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
   }
 // When a client connects
 io.on('connection', (socket) => {
@@ -27,16 +21,16 @@ io.on('connection', (socket) => {
   console.log(`[${new Date().toLocaleTimeString()}] User connected from IP: ${userIp}, Id: ${socket.id}`);
 
   // Send chat history to the new client
-  socket.emit('load history', messages);
+  socket.emit('load history', messages.map((message) => ({ nickname: message.nickname, msg: message.msg, time: message.time })));
 
   // When a client sets their nickname
   socket.on('set nickname', (nickname) => {
     nickname = sanitizeInput(nickname);  // Sanitize the nickname
     users[socket.id] = nickname;
-    console.log(`ID:${socket.id} IP ${socket.handshake.address} set nickname: ${nickname}`);
+    console.log(`[${new Date().toLocaleTimeString()}] ID:${socket.id} IP ${socket.handshake.address} set nickname: ${nickname}`);
     io.emit('user connected', nickname);
   });
-  
+
   // When a client sends a message
   socket.on('chat message', (msg) => {
     const nickname = users[socket.id] || 'Anonymous';
@@ -44,14 +38,14 @@ io.on('connection', (socket) => {
     const messageData = { nickname, msg, time: new Date().toLocaleTimeString() };
     messages.push(messageData);  // Store message
     io.emit('chat message', messageData);
-    console.log(`[${new Date().toLocaleTimeString()}] ID: ${socket.id} ${nickname}: ${msg} (${userIp})`);
+    console.log(`[${new Date().toLocaleTimeString()}] ${nickname}: ${msg} (${userIp}) ID: ${socket.id}`);
   });
 
   // Handle client disconnect
   socket.on('disconnect', () => {
     const nickname = users[socket.id];
     delete users[socket.id]; // Remove the user from the list
-    console.log(`[${new Date().toLocaleTimeString()}] ID: ${socket.id}; ${nickname || 'A user'} disconnected with IP: ${userIp}`);
+    console.log(`[${new Date().toLocaleTimeString()}] ${nickname || 'A user'} disconnected with IP: ${userIp} ID: ${socket.id}`);
     io.emit('user disconnected', nickname);
   });
 
@@ -75,5 +69,5 @@ app.get('/users-online', (req, res) => {
 // Start the server
 const PORT = 1234;
 server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`[${new Date().toLocaleTimeString()}] Server is running at http://localhost:${PORT}`);
 });
